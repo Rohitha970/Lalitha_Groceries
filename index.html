@@ -1,294 +1,1070 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Lalitha Groceries</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0; padding: 0;
-      scroll-behavior: smooth;
-      background-color: #fff;
-    }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Lalitha Groceries</title>
+<style>
+:root{
+  --accent:#e60073;
+  --nav:#FF99CC;
+  --btn:#27ae60;
+  --muted:#f9f9f9;
+  --glass: rgba(255,255,255,0.95);
+  --card-radius:10px;
+  --max-width:1100px;
+  --shadow: 0 6px 18px rgba(0,0,0,0.08);
+  --star-yellow:#ffc107;
+  --wish-red:#ff4d4d;
+}
+*{box-sizing:border-box}
+body{
+  font-family: "Segoe UI", Arial, sans-serif;
+  margin:0; padding:0; background:#fff; color:#222;
+  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+}
 
-    /* Intro animation screen */
-    #intro {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-color: #fff;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation: fadeOut 3s forwards 2s;
-    }
+/* header/nav */
+header{background:#fff;padding:12px 12px;border-bottom:4px solid var(--accent);display:flex;align-items:center;gap:12px;justify-content:space-between}
+header h1{margin:0;font-size:22px;color:var(--accent)}
+header #welcome-text{font-size:14px;color:#333;display:none}
+nav{background:var(--nav);display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:10px}
+nav a{color:#fff;text-decoration:none;padding:6px 10px;font-weight:600;border-radius:6px}
+nav .right{margin-left:auto;display:flex;gap:8px;align-items:center;padding-right:12px}
 
-    #intro h1 {
-      font-size: 3em;
-      color: magenta;
-      animation: zoomIn 1.5s ease-out;
-    }
+/* container & sections */
+.container{max-width:var(--max-width);margin:18px auto;padding:0 16px}
+.section{padding:18px 0; border-bottom:2px solid #eee; margin-bottom:18px}
+h2{margin:0 0 10px 0}
+.lead{font-size:15px;color:#333}
 
-    @keyframes zoomIn {
-      0% { transform: scale(0.2); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
+/* cards & components */
+.card{background:var(--glass);padding:14px;border-radius:10px;box-shadow:var(--shadow)}
+.categories{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;margin-top:12px}
+@media(max-width:1100px){.categories{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:900px){.categories{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:520px){.categories{grid-template-columns:repeat(1,1fr)}}
+.product{background:var(--muted);border-radius:10px;padding:10px;text-align:center;box-shadow:var(--shadow)}
+.product img{width:100%;height:140px;object-fit:cover;border-radius:8px}
+.product h4{margin:8px 0 6px}
+.price{font-weight:700;margin:4px 0}
+.flex{display:flex;gap:8px;align-items:center;justify-content:center}
+.btn{background:var(--btn);color:#fff;border:none;padding:8px 10px;border-radius:8px;cursor:pointer;font-weight:700}
+.small{padding:6px 8px;font-size:14px}
+.subcat-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 15px 0;
+}
+/* Clean aligned subcategory buttons */
+.subcat-btns {
+    max-width: 1200px;
+    margin: 0 auto 25px auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+}
 
-    @keyframes fadeOut {
-      to { opacity: 0; visibility: hidden; }
-    }
+.subcat-btns button {
+    padding: 10px 18px;
+    background: #cfe9ff;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.25s;
+}
+.subcat-btns button:hover {
+  background: #b6dbff;        /* slightly darker */
+}
+.subcat-btns button.active {
+    background: #4ba3ff;
+    color: white;
+    transform: scale(1.05);
+}
 
-    header, footer {
-      background-color: #e60073;
-      color: white;
-      padding: 15px;
-      text-align: center;
-font-size:26px;
-    }
 
-    nav {
-      background-color: #FF99CC;
-      display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
-      padding: 10px;
-      font-weight: bold;
-    }
+/* wishlist & stars */
+.wish{background:transparent;border:1px dashed #ccc;padding:6px;border-radius:6px;cursor:pointer}
+.wish.active{background:var(--wish-red);color:#fff;border-color:var(--wish-red)}
+.stars{display:flex;gap:6px;justify-content:center;margin-top:8px}
+.star{cursor:pointer;font-size:18px;color:#ddd}
+.star.active{color:var(--star-yellow)}
 
-    nav a {
-      color: white;
-      text-decoration: none;
-      padding: 5px 10px;
-font-size:22px;
-    }
+/* login */
+.form-row{display:flex;flex-direction:column;gap:8px}
+input[type="text"],input[type="email"],input[type="tel"]{padding:10px;border-radius:8px;border:1px solid #ddd;font-size:14px}
 
-    nav a:hover {
-      text-decoration: underline;
-    }
+/* cart */
+#cart-items{display:flex;flex-direction:column;gap:10px}
+.cart-item{display:flex;gap:12px;align-items:center;background:#fff;padding:10px;border-radius:8px;box-shadow:var(--shadow)}
+.cart-item img{width:80px;height:60px;object-fit:cover;border-radius:6px}
+.qty{display:flex;align-items:center;gap:6px}
+.small-muted{font-size:13px;color:#666}
 
-    .section {
-      padding: 20px;
+/* sidebar */
+#sidebar{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:9999}
+.panel{background:#fff;width:92%;max-width:920px;height:90vh;border-radius:12px;overflow:auto;padding:18px;position:relative}
+.close{position:absolute;right:16px;top:12px;background:transparent;border:none;font-size:22px;cursor:pointer}
 
- }
+/* confetti canvas */
+#confetti-overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:10000;background:rgba(0,0,0,0.2)}
+.confetti-modal{background:#fff;padding:22px;border-radius:12px;text-align:center;box-shadow:var(--shadow)}
 
-    .categories {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-      margin-bottom: 40px;
-    }
+/* toast */
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;background:#222;color:#fff;padding:10px 14px;border-radius:8px;display:none;z-index:20000}
 
-    .product-card {
-      width: 200px;
-      border: 1px solid #ccc;
-      padding: 10px;
-      text-align: center;
-      border-radius: 10px;
-      background-color: #f9f9f9;
-    }
-
-    .product-card img {
-      width: 180px;
-      height: 150px;
-      object-fit: cover;
-      border-radius: 8px;
-    }
-
-    .btn {
-      background-color:#27ae60 ;
-      color: white;
-      border: none;
-      padding: 8px 12px;
-      margin-top: 10px;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-
-    .btn:hover {
-      background-color: #219150;
-    }
-
-    h3 {
-      text-align: center;
-      background-color: #b2fffc;
-      padding: 10px;
-      border-radius: 8px;
-    }
-
-    /* About Section - Flex Layout */
-    .about-container {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-    }
-
-    .about-container img {
-      width: 100%;
-      max-width: 300px;
-      border-radius: 10px;
-    }
-
-    .about-text {
-      flex: 1;
-      max-width: 600px;
-    }
-
-    @media (max-width: 768px) {
-      .about-container {
-        flex-direction: column;
-        text-align: center;
-      }
-      .about-text {
-        max-width: 90%;
-      }
-    }
-  </style>
+/* footer */
+footer{padding:12px 16px;text-align:center;background:#111;color:#fff;margin-top:18px;border-top:4px solid var(--accent);font-size:14px}
+</style>
 </head>
 <body>
 
-<!-- Intro Animation -->
-<div id="intro">
-  <h1>Lalitha Groceries</h1>
-</div>
-
 <header>
-  <h1>Welcome to Lalitha Groceries</h1>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <h1 style="color:var(--accent);margin:0">Lalitha Groceries</h1>
+    <div id="welcome-text">Hello, <b id="welcome-name"></b></div>
+  </div>
+  <div style="font-size:13px;color:#666">Demo: data stored locally in your browser</div>
 </header>
 
 <nav>
-  <a href="#home">Home</a>
-  <a href="#shop">Shop</a>
-  <a href="#Fruits">Fruits</a>
-  <a href="#Vegetables">Vegetables</a>
-  <a href="#Dairy">Dairy</a>
-  <a href="#Bakery">Bakery</a>
-  <a href="#Beverages">Beverages</a>
-  <a href="#Pantry">Pantry</a>
-  <a href="#about">About</a>
-  <a href="#contact">Contact</a>
-  <a href="#">🛒 Cart (0)</a>
+  <a href="#home" onclick="showSection('home')">Home</a>
+  <a href="#shop" onclick="showSection('shop')">Shop</a>
+  <a href="#about" onclick="showSection('about')">About</a>
+  <a href="#contact" onclick="showSection('contact')">Contact</a>
+  <a href="#cart" onclick="showSection('cart')">Cart (<span id="cart-count">0</span>)</a>
+  <div class="right" style="margin-left:auto;padding-right:12px">
+    <a href="#" id="profile-btn" onclick="openSidebar()">Profile</a>
+    <a href="#login" id="login-link" onclick="showSection('login')">Login</a>
+    <a href="#" id="logout-link" style="display:none" onclick="logout()">Logout</a>
+  </div>
 </nav>
 
-<section id="home" class="section">
-  <h2 style="font-size:21px;">Welcome to Lalitha Groceries!</h2>
-  <p style="font-size:20px;">Your one-stop shop for fresh fruits, vegetables, dairy, bakery, beverages, and pantry items. shop in Lalitha Groceries Eat well,Live well,Be well !!</p>
-</section>
 
-<section id="shop" class="section">
-  <h2>Shop</h2>
-  <div id="products"></div>
-</section>
+<div class="container">
+  <!-- HOME -->
+  <section id="home" class="section">
+    <div class="home-grid">
+      <div class="home-hero card">
+        
+<img id="home-img" src="home-banner.png" alt="Home banner" width="600" height="300">
 
-<section id="about" class="section">
-  <h2>About Us</h2>
-  <div class="about-container">
-    <img src="about.jpg" alt="About Lalitha Groceries">
-    <div class="about-text">
-      <p>
-        Lalitha Groceries is your trusted neighborhood grocery store bringing fresh, high-quality produce and pantry essentials right to your doorstep.
-        We pride ourselves on our customer service, competitive pricing, and seamless shopping experience.
-        Whether you're preparing for a big celebration or restocking your weekly essentials, Lalitha Groceries is here to make shopping easy and enjoyable.
-      </p>
+
+      </div>
+      <div class="home-cta card">
+        <h2>Fresh groceries, delivered fast</h2>
+        <p class="lead">Handpicked fruits, vegetables, dairy and pantry essentials from trusted local farmers. Fast delivery with friendly service.</p>
+        <div style="margin-top:12px">
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn" onclick="showSection('shop'); scrollToSection('shop')">Shop Now</button>
+            <button class="btn" onclick="showSection('about');scrollToSection('about')">Read More</button>
+            <button class="small" onclick="openSidebar()">Open Profile</button>
+          </div>
+        </div>
+        <div style="margin-top:18px;color:#666">
+          <strong>Quick tips:</strong>
+          <ul style="margin-top:8px">
+            <li>Use the Shop tab to browse categories</li>
+            <li>Add items to wishlist for later</li>
+            <li>Checkout with cash on delivery (demo)</li>
+          </ul>
+        </div>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+  <section id="home2" class="section">
+    <h2>Welcome!</h2>
+    <p class="lead">Your one-stop shop for fresh fruits, vegetables, dairy, bakery, beverages and pantry items.</p>
+    <img src="home-banner.jpg" alt="Fresh groceries" style="width:100%;max-height:320px;object-fit:cover;border-radius:10px;margin-top:12px" onerror="this.style.opacity=.6">
+  </section>
 
+  <!-- LOGIN -->
+  <section id="login" class="section" style="display:none">
+    <div class="card">
+      <h2>Login / Register</h2>
+      <p class="small-muted">Enter name and email to continue. Demo stores data locally.</p>
+      <div class="form-row" style="margin-top:12px">
+        <input id="inpName" type="text" placeholder="Full name" />
+        <div id="name-err" class="small-muted" style="display:none;color:#b33">Name required</div>
+        <input id="inpEmail" type="email" placeholder="Email address (e.g., you@gmail.com)" />
+        <div id="email-err" class="small-muted" style="display:none;color:#b33">Valid email required</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
+          <div class="small-muted">Demo: use any name and email</div>
+          <button id="btnContinue" class="btn" disabled>Continue</button>
+        </div>
+        <div id="login-success" style="display:none;margin-top:8px;background:#e7ffef;border:1px solid #c6f1d0;padding:8px;border-radius:8px;color:#1a7a3a">Logged in — welcome!</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SHOP -->
+  <section id="shop" class="section" style="display:none">
+    <h2>Shop by categories</h2>
+<div class="subcategories" id="subcats-bar"></div>
+<div class="subcat-btns">
+    <button data-target="Fruits">🍎 Fruits</button>
+    <button data-target="Vegetables">🥕 Vegetables</button>
+    <button data-target="Dairy">🥛 Dairy</button>
+    <button data-target="Bakery">🥐 Bakery</button>
+    <button data-target="Beverages">🥤 Beverages</button>
+    <button data-target="Pantry">🛒 Pantry</button>
+</div>
+<section id="Fruits"></section>
+<section id="Vegetables"></section>
+<section id="Dairy"></section>
+<section id="Bakery"></section>
+<section id="Beverages"></section>
+<section id="Pantry"></section>
+    
+    <div id="products-area"></div>
+  </section>
+  <!-- ABOUT -->
+<section id="about" class="section" style="display:none">
+    <h2>About Us</h2>
+  
+    <div class="about-grid">
+      
+<img src="about-banner.png" alt="About banner" width="100%" height="300">
+      <div class="card about-content">
+        <h2>Our story & mission</h2>
+        <p class="lead">Lalitha Groceries began as a small neighborhood store with a big idea: connect local farmers to families who want fresh, healthy food. Today we bring you a curated selection of seasonal produce, pantry staples, and hand-made goods — all with transparent sourcing and fair pricing.</p>
+        <p>We focus on sustainability, supporting local communities, and reducing food miles. Our packaging is eco-friendly and we prioritize farms that use responsible practices.</p>
+        <h4>What makes us different</h4>
+        <ul>
+          <li>Farm-to-doorstep freshness</li>
+          <li>Flexible delivery slots</li>
+          <li>Clear quality checks & refunds</li>
+        </ul>
+        <div style="margin-top:12px">
+          <button class="btn" onclick="showSection('shop')">Explore Fresh Picks</button>
+          <button class="small" onclick="scrollToSection('home')">Back to Home</button>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;align-items:center;background:var(--muted);padding:12px;border-radius:10px">
+      <img src="about.jpg" alt="About" style="width:220px;height:160px;object-fit:cover;border-radius:8px" onerror="this.style.opacity=.6">
+      <div>
+        <p>Lalitha Groceries is your trusted neighborhood grocery store bringing fresh, high-quality produce and pantry essentials right to your doorstep.</p>
+        <p>We source from local farmers, offer seasonal promotions, and deliver fast. Our mission: make grocery shopping simple, affordable and joyful.</p>
+      </div>
+    </div>
+  
+  </section>
+  <!-- CONTACT -->
 <section id="contact" class="section">
-  <h2>Contact Us</h2>
-  <p>Email: support@lalithagroceries.com </p>
-<p>Phone no: +91 98765 43210</p>
-<p>Mobile no: +91 8976549023</p>
-
-  <p>Address: 123 Market Street, Chennai, India</p>
-<p  style=" text-align:center;color:gold;font-weight:bold; font-size:24px;" >Feel Free To Reach Us</P>
-</section>
-
-<footer>
-  © 2025 Lalitha Groceries. All rights reserved.
-</footer>
-
+    <h2>Contact & Branches</h2>
+    <p class="lead">We are happy to serve you across multiple branches. Click a branch to copy address or call.</p>
+    <div class="card" style="margin-top:12px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+        <div class="address-card" style="padding:12px;border-radius:10px;background:#fff;box-shadow:var(--shadow);cursor:pointer" onclick="copyBranch('Chennai - Main Branch','12, Anna Nagar East, Chennai','+91 98765 43210')">
+          <h3>Chennai - Main Branch</h3>
+          <div>12, Anna Nagar East, Chennai</div>
+          <div>📞 +91 98765 43210</div>
+          <div style="margin-top:8px;color:#777;font-size:13px">Click to copy</div>
+        </div>
+        <div class="address-card" style="padding:12px;border-radius:10px;background:#fff;box-shadow:var(--shadow);cursor:pointer" onclick="copyBranch('Bangalore Branch','22, JP Nagar 5th Phase, Bangalore','+91 91234 56789')">
+          <h3>Bangalore Branch</h3>
+          <div>22, JP Nagar 5th Phase, Bangalore</div>
+          <div>📞 +91 91234 56789</div>
+          <div style="margin-top:8px;color:#777;font-size:13px">Click to copy</div>
+        </div>
+        <div class="address-card" style="padding:12px;border-radius:10px;background:#fff;box-shadow:var(--shadow);cursor:pointer" onclick="copyBranch('Hyderabad Branch','45, Kukatpally H.B., Hyderabad','+91 99887 66554')">
+          <h3>Hyderabad Branch</h3>
+          <div>45, Kukatpally Housing Board, Hyderabad</div>
+          <div>📞 +91 99887 66554</div>
+          <div style="margin-top:8px;color:#777;font-size:13px">Click to copy</div>
+        </div>
+        <div class="address-card" style="padding:12px;border-radius:10px;background:#fff;box-shadow:var(--shadow);cursor:pointer" onclick="copyBranch('Mumbai Branch','5, Andheri West Market, Mumbai','+91 90123 45678')">
+          <h3>Mumbai Branch</h3>
+          <div>5, Andheri West Market, Mumbai</div>
+          <div>📞 +91 90123 45678</div>
+          <div style="margin-top:8px;color:#777;font-size:13px">Click to copy</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- CART -->
+  <section id="cart" class="section" style="display:none">
+    <h2>Your Cart</h2>
+    <div id="cart-items"></div>
+    <div style="max-width:720px;margin-top:12px;display:flex;justify-content:flex-end;gap:8px">
+      <button id="continue-btn" class="btn" style="display:none" onclick="beginCheckout()">Continue to Checkout</button>
+    </div>
+    <div id="checkout" style="display:none;max-width:720px;margin-top:12px" class="card">
+      <h3>Checkout (Cash on Delivery)</h3>
+      <div class="form-row">
+        <input id="shipName" type="text" placeholder="Full name" />
+        <input id="shipPhone" type="tel" placeholder="Phone number" />
+        <input id="shipAddress" type="text" placeholder="Delivery address" />
+        <div style="display:flex;justify-content:flex-end;margin-top:8px">
+          <button class="btn" onclick="placeOrder()">Place Order (COD)</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<!-- PROFILE SIDEBAR -->
+<div id="sidebar">
+  <div class="panel">
+    <button class="close" onclick="closeSidebar()">✕</button>
+    <h3>Profile & Settings</h3>
+    <div id="profile-content" style="margin-top:12px"></div>
+  </div>
+</div>
+<!-- CONFETTI -->
+<div id="confetti-overlay">
+  <canvas id="confetti-canvas" style="position:fixed;inset:0;pointer-events:none"></canvas>
+  <div class="confetti-modal">
+    <h2>Order Placed Successfully 🎉</h2>
+    <p>Thanks! Your order will be delivered soon.</p>
+    <div style="margin-top:12px"><button class="btn" onclick="closeConfetti()">Continue Shopping</button></div>
+  </div>
+</div>
+<div id="toast"></div>
+<footer>&copy; 2025 Lalitha Groceries | All rights reserved.</footer>
 <script>
-  const categories = {
-    Fruits: [
-      { name: 'Apple', price: 100, img:'Apples.jpg'},
-      { name: 'Banana', price: 40, img: 'Bananas.jpg' },
-      { name: 'Orange', price: 80, img: 'oranges.jpg' },
-      { name: 'Strawberry', price: 150, img: 'strawberries.jpg' },
-      { name: 'Guava', price: 60, img: 'guava.jpg' }
+/* ======= Data & Storage helpers ======= */
+function storageGet(key, fallback){ try{ return JSON.parse(localStorage.getItem(key)) ?? fallback }catch(e){return fallback} }
+function storageSet(key,val){ localStorage.setItem(key, JSON.stringify(val)); }
+/* ======= SAMPLE data with explicit IDs (auto-generated for missing ones) ======= */
+const SAMPLE = {
+  categories: {
+    
+ Fruits: [
+      {id:'F1',name:'Apple',price:100,img:'Apples.jpg'},
+      {id:'F2',name:'Banana',price:40,img:'Bananas.jpg'},
+      {id:'F3',name:'Orange',price:80,img:'oranges.jpg'},
+      {id:'F4',name:'Strawberry',price:150,img:'strawberries.jpg'},
+      {id:'F5',name:'Guava',price:60,img:'guava.jpg'},
+{id:'F6',name:'kiwi',price:60,img:'kiwi.jpg'},
+{id:'F7',name:'Mango',price:80,img:'mango.jpg'},
+{id:'F8',name:'Pineapple',price:100,img:'pineapple.jpg'},
+{id:'F9',name:'Watermelon',price:80,img:'watermelon.jpg'},
+{id:'F10',name:'Grapes',price:60,img:'grape.jpg'},
+{id:'F11',name:'Cherries',price:80,img:'cherry.jpg'},
+{id:'F12',name:'Sapoto',price:60,img:'sapota.jpg'},
+{id:'F13',name:'Pomegranate',price:100,img:'pome.jpg'},
+{id:'F14',name:'Pear',price:70,img:'pear.jpg'},
+{id:'F15',name:'Dragon Fruit',price:200,img:'dragon.jpg'},
+{id:'F16',name:'Papaya',price:60,img:'papa.jpg'},
+{id:'F17',name:'Blueberries',price:100,img:'blue.jpg'},
+{id:'F18',name:'MuskMelon',price:70,img:'musk.jpg'},
+{id:'F19',name:'Lychee',price:80,img:'lyc.jpg'},
+{id:'F20',name:'Custard Apples',price:100,img:'custard.jpg'},
+{id:'F21',name:'Figs',price:90,img:'fig.jpg'},
+{id:'F22',name:'Rambutan',price:80,img:'ram.jpg'},
+{id:'F23',name:'Star Fruit',price:100,img:'star.jpg'},
+{id:'F24',name:'Jack Fruit',price:300,img:'jack.jpg'},
+{id:'F25',name:'Mulberries',price:200,img:'mul.jpg'},
+
+
+
     ],
-    Vegetables: [
-      { name: 'Carrot', price: 30, img: 'carrots.jpg' },
-      { name: 'Tomatoes', price: 25, img: 'Tomatoes.jpg' },
-      { name: 'Brinjal', price: 35, img: 'brinjal.jpg' },
-      { name: 'Chillies', price: 20, img: 'chillies.jpg' },
-      { name: 'Beetroot', price: 28, img: 'beetroot.jpg' }
+    Vegetables:[
+      {id:'V1',name:'Carrot',price:30,img:'carrots.jpg'},
+      {id:'V2',name:'Tomatoes',price:25,img:'Tomatoes.jpg'},
+      {id:'V3',name:'Brinjal',price:35,img:'brinjal.jpg'},
+      {id:'V4',name:'Chillies',price:20,img:'chillies.jpg'},
+      {id:'V5',name:'Beetroot',price:40,img:'beetroot.jpg'},
+{id:'V6',name:'Drumstick',price:30,img:'drumstick.jpg'},
+{id:'V7',name:'Garlic',price:60,img:'garlic.jpg'},
+{id:'V8',name:'Ginger',price:40,img:'ginger.jpg'},
+{id:'V9',name:'Onions',price:50,img:'onion.jpg'},
+{id:'V10',name:'Potatoes',price:35,img:'potato.jpg'},
+{id:'V11',name:'Radish',price:40,img:'radish.jpg'},
+{id:'V12',name:'Pumpkin',price:30,img:'pumpkin.jpg'},
+{id:'V13',name:'Bottle Gourd',price:40,img:'bottlegaurd.jpg'},
+{id:'V14',name:'Capsicum',price:60,img:'capsi.jpg'},
+{id:'V15',name:'Cauli Flower',price:40,img:'cauli.jpg'},
+{id:'V16',name:'Mushrooms',price:80,img:'mush.jpg'},
+{id:'V17',name:'Cabbage',price:50,img:'cabbage.jpg'},
+{id:'V18',name:'Sweet Corn',price:30,img:'sweet.jpg'},
+{id:'V19',name:'Broccoli',price:40,img:'bro.jpg'},
+{id:'V20',name:'Beans',price:30,img:'beans.jpg'},
+{id:'V21',name:'Red chillies',price:70,img:'red.jpg'},
+{id:'V22',name:'ladys Finger',price:50,img:'lady.jpg'},
+{id:'V23',name:'Peas',price:30,img:'peas.jpg'},
+{id:'V24',name:'parsley',price:50,img:'par.jpg'},
+{id:'V25',name:'Ridge Gourd',price:40,img:'ridge.jpg'},
+
     ],
     Dairy: [
-      { name: 'Milk', price: 50, img: 'milk.jpg' },
-      { name: 'Cheese', price: 120, img: 'cheese.jpg' },
-      { name: 'Ice Cream', price: 90, img: 'icecream.jpg' },
-      { name: 'Curd', price: 40, img: 'curd.jpg' },
-{ name: 'Butter', price: 40, img: 'butter.jpg' }
+      {id:'D1',name:'Milk',price:50,img:'milk.jpg'},
+      {id:'D2',name:'Cheese',price:120,img:'cheese.jpg'},
+      {id:'D3',name:'Ice Cream',price:90,img:'icecream.jpg'},
+      {id:'D4',name:'Curd',price:40,img:'curd.jpg'},
+      {id:'D5',name:'Butter',price:50,img:'butter.jpg'},
+{id:'D6',name:'Ghee',price:80,img:'ghee.jpg'},
+{id:'D7',name:'Paneer',price:90,img:'paneer.jpg'},
+{id:'D8',name:'FreshCream',price:40,img:'freshcream.jpg'},
+{id:'D9',name:'ButterMilk',price:30,img:'buttermilk.jpg'},
+{id:'D10',name:'FlavouredMilk',price:50,img:'flavouredmilk.jpg'},
+{id:'D11',name:'Khoya',price:50,img:'khoya.jpg'},
+{id:'D12',name:'Evaporated Milk',price:60,img:'evaporated.jpg'},
+{id:'D13',name:'Condensed Milk',price:90,img:'condensedmilk.jpg'},
+{id:'D14',name:'Cream Cheese',price:50,img:'creamcheese.jpg'},
+{id:'D15',name:'Milk Powder',price:250,img:'milkpowder.jpg'},
+{id:'D16',name:'Rasgulla',price:50,img:'ras.jpg'},
+{id:'D17',name:'GulabJamun Mix ',price:90,img:'gulab.jpg'},
+{id:'D18',name:'Flavoured Curd',price:60,img:'flacurd.jpg'},
+{id:'D19',name:'Salted Butter',price:50,img:'saltbut.jpg'},
+{id:'D20',name:'Whipping Cream',price:100,img:'whip.jpg'},
+{id:'D21',name:' Probiotic Milk',price:80,img:'pro.jpg'},
+{id:'D22',name:'Cottage Cheese',price:40,img:'cottage.jpg'},
+{id:'D23',name:'Unsalted Butter',price:30,img:'unsalt.jpg'},
+{id:'D24',name:'Yogurt ',price:40,img:'yog.jpg'},
+{id:'D25',name:'Mozzarella Cheese',price:50,img:'moz.jpg'},
 
     ],
-    Bakery: [
-      { name: 'Bread', price: 30, img: 'bread.jpg' },
-      { name: 'Cookies', price: 60, img: 'cookies.jpg' },
-      { name: 'pancake', price: 25, img: 'pancake.jpg' },
-      { name: 'Cupcakes', price: 70, img: 'cupcakes.jpg' },
-    { name: 'Pastries', price: 70, img: 'pastries.jpg' }
-],
-    Beverages: [
-      { name: 'Juice', price: 40, img: 'softdrinks.jpg' },
-      { name: 'Soft Drink', price: 35, img: 'juice.jpg' },
-      { name: 'Water', price: 20, img: 'water.jpg' },
- { name: 'Tea', price: 20, img: 'tea.jpg' },
- { name: 'Coffee', price: 20, img: 'coffee.jpg' }
+    Bakery:[
+      {id:'B1',name:'Bread',price:30,img:'bread.jpg'},
+      {id:'B2',name:'Cookies',price:60,img:'cookies.jpg'},
+      {id:'B3',name:'Pancake',price:25,img:'pancake.jpg'},
+      {id:'B4',name:'Cupcakes',price:70,img:'cupcakes.jpg'},
+      {id:'B5',name:'Pastries',price:80,img:'pastries.jpg'},
+{id:'B6',name:'Puffs',price:30,img:'puff.jpg'},
+{id:'B7',name:'Donuts',price:100,img:'donuts.jpg'},
+{id:'B8',name:'Muffins',price:60,img:'muffins.jpg'},
+{id:'B9',name:'Rusk',price:50,img:'rusk.jpg'},
+{id:'B10',name:'Buns',price:30,img:'buns.jpg'},
+{id:'B11',name:'Plum Cake',price:70,img:'plumcake.jpg'},
+{id:'B12',name:'Brownies',price:90,img:'brownie.jpg'},
+{id:'B13',name:'Burger',price:40,img:'burger.jpg'},
+{id:'B14',name:'Sandwich',price:50,img:'sandwich.jpg'},
+{id:'B15',name:'Biscuits',price:30,img:'biscuit.jpg'},
+{id:'B16',name:'Cream Rolls',price:90,img:'creamrolls.jpg'},
+{id:'B17',name:'Pizza',price:50,img:'piza.jpg'},
+{id:'B18',name:'Cake slices',price:30,img:'cakeslices.jpg'},
+{id:'B19',name:'wheat Buns',price:80,img:'wheat.jpg'},
+
+{id:'B20',name:'Swiss Rolls',price:70,img:'swiss.jpg'},
+{id:'B21',name:'Fruit Bread',price:80,img:'fru.jpg'},
+{id:'B22',name:'Garlic Bread',price:40,img:'garlicbread.jpg'},
+{id:'B23',name:'Bagels',price:50,img:'bagels.jpg'},
+{id:'B24',name:'Bread Sticks',price:70,img:'sticks.jpg'},
+{id:'B25',name:'Pie Crust',price:50,img:'pie.jpg'},
+
 
     ],
-    Pantry: [
-      { name: 'Rice', price: 60, img: 'rice.jpg' },
-      { name: 'Flour', price: 45, img: 'floor.jpg' },
-      { name: 'Cereals', price: 38, img: 'cereals.jpg' },
-      { name: 'Spices', price: 70, img: 'spices.jpg' },
-     { name: 'oil', price: 70, img: 'oil.jpg' }],
+    Beverages:[
+      {id:'BE1',name:'Juice',price:40,img:'juice.jpg'},
+      {id:'BE2',name:'Soft Drink',price:35,img:'softdrinks.jpg'},
+      {id:'BE3',name:'Water',price:20,img:'water.jpg'},
+      {id:'BE4',name:'Tea',price:20,img:'tea.jpg'},
+      {id:'BE5',name:'Coffee',price:20,img:'coffee.jpg'},
+{id:'BE6',name:'Milkshakes',price:60,img:'milkshakes.jpg'},
+{id:'BE7',name:'coconut water',price:100,img:'coconutwater.jpg'},
 
-  };
+{id:'BE8',name:'Lassi',price:50,img:'lassi.jpg'},
 
-  const productContainer = document.getElementById("products");
+{id:'BE9',name:'Soda',price:40,img:'soda.jpg'},
+{id:'BE10',name:'Smoothies',price:80,img:'smoothies.jpg'},
+{id:'BE11',name:'Green Tea',price:30,img:'greentea.jpg'},
+{id:'BE12',name:'Cold Coffee',price:90,img:'cold.jpg'},
+{id:'BE13',name:'lemon Juice',price:40,img:'lemon.jpg'},
+{id:'BE14',name:'Herbal Tea',price:60,img:'herbal.jpg'},
+{id:'BE15',name:'Mango Lassi',price:50,img:'mangolasi.jpg'},
+{id:'BE16',name:'SugarCane Juice',price:40,img:'sugarcane.jpg'},
+{id:'BE17',name:'Aloevera Juice',price:50,img:'aloe.jpg'},
+{id:'BE18',name:'Rose Milk',price:60,img:'rose.jpg'},
+{id:'BE19',name:'Badam Milk',price:80,img:'badam.jpg'},
+{id:'BE20',name:'Buttermilk Spiced',price:40,img:'butterspi.jpg'},
+{id:'BE21',name:'Hot chocolate',price:50,img:'hot.jpg'},
 
-  for (let category in categories) {
-    const section = document.createElement("section");
-    section.id = category;
+{id:'BE22',name:'Kombucha',price:60,img:'kombucha.jpg'},
 
-    const catHeader = document.createElement("h3");
-    catHeader.innerText = category;
-    section.appendChild(catHeader);
+{id:'BE23',name:'Masala Soda',price:40,img:'masa.jpg'},
 
-    const catRow = document.createElement("div");
-    catRow.className = "categories";
+{id:'BE24',name:'Protein Shakes',price:100,img:'protein.jpg'},
 
-    categories[category].forEach(product => {
-      const card = document.createElement("div");
-      card.className = "product-card";
+{id:'BE25',name:'Butterscotch Milkshake',price:80,img:'scotch.jpg'},
+
+
+
+
+    ],
+    Pantry:[
+      {id:'P1',name:'Rice',price:80,img:'rice.jpg'},
+      {id:'P2',name:'Oil',price:100,img:'oil.jpg'},
+      {id:'P3',name:'Flour',price:45,img:'floor.jpg'},
+      {id:'P4',name:'Cereals',price:38,img:'cereals.jpg'},
+      {id:'P5',name:'Spices',price:70,img:'spices.jpg'},
+{id:'P6',name:'Eggs',price:60,img:'eggs.jpg'},
+
+{id:'P7',name:'Pasta',price:70,img:'pasta.jpg'},
+
+{id:'P8',name:'Noodles',price:50,img:'noodles.jpg'},
+{id:'P9',name:'Pickels',price:150,img:'pickels.jpg'},
+{id:'P10',name:'Sauces',price:100,img:'sauce.jpg'},
+{id:'P11',name:'Jaggery',price:80,img:'jaggery.jpg'},
+{id:'P12',name:'Suji',price:50,img:'suji.jpg'},
+{id:'P13',name:'Vermicilli',price:100,img:'vermicili.jpg'},
+{id:'P14',name:'Sugar',price:90,img:'sugar.jpg'},
+{id:'P15',name:'Oats',price:50,img:'oats.jpg'},
+{id:'P16',name:'CornFlakes',price:80,img:'corn.jpg'},
+{id:'P17',name:'Salt',price:40,img:'salt.jpg'},
+{id:'P18',name:'Lentils',price:70,img:'len.jpg'},
+{id:'P19',name:'Brown Rice',price:200,img:'brown.jpg'},
+{id:'P20',name:'Urad Dal',price:150,img:'urad.jpg'},
+
+{id:'P21',name:'wheat',price:80,img:'wheatf.jpg'},
+
+{id:'P22',name:'Green Gram',price:50,img:'gram.jpg'},
+
+{id:'P23',name:'Mustard Seeds',price:90,img:'mus.jpg'},
+
+{id:'P24',name:'Besan',price:200,img:'besan.jpg'},
+
+{id:'P25',name:'DryFruits',price:250,img:'dry.jpg'},
+
+
+
+    ]
+ 
+  }
+};
+
+function renderSubcats(){
+  const bar = document.getElementById('subcats-bar');
+  bar.innerHTML='';
+  const allBtn = document.createElement('button');
+   allBtn.classList.add('active');
+allBtn.textContent = subcatsEmojis["All"]+" All";
+
+  allBtn.onclick = ()=>filterProducts("All",allBtn);
+  bar.appendChild(allBtn);
+  for(const cat in SAMPLE.categories){
+    const btn=document.createElement('button');
+    btn.textContent = subcatsEmojis[cat]+" "+cat;
+    btn.onclick = ()=>filterProducts(cat,btn);
+    bar.appendChild(btn);
+  }
+}
+let currentFilter="All";
+function filterProducts(cat,btn){
+  currentFilter=cat;
+  document.querySelectorAll('#subcats-bar button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderShop();
+}
+function renderShop() {
+  console.log("Rendering shop for filter:", "${currentFilter}");
+
+  const area = document.getElementById('products-area');
+  area.innerHTML = '';
+
+  for (const cat in SAMPLE.categories) {
+
+    if (currentFilter !== "All" && currentFilter !== cat) continue;
+
+    const sect = document.createElement('div');
+
+    // ⭐ Category title (correct place for ID)
+    const title = document.createElement('h3');
+    title.textContent = cat;
+    title.id = cat;  
+    title.style.scrollMarginTop = "150px"; // better offset for your fixed navbar
+    sect.appendChild(title);
+
+    // Grid
+    const grid = document.createElement('div');
+    grid.className = 'categories';
+
+    SAMPLE.categories[cat].forEach(p => {
+      const card = document.createElement('div'); 
+      card.className = 'product';
+
       card.innerHTML = `
-        <img src="${product.img}" alt="${product.name}">
-        <h4>${product.name}</h4>
-        <p>₹${product.price}</p>
-        <button class="btn" onclick="alert('Added ${product.name} - ₹${product.price} to cart')">Add to Cart</button>
+        <img src="${p.img}" alt="${p.name}">
+        <h4>${p.name}</h4>
+        <div class="price">₹${p.price}</div>
+
+        <div class="flex">
+            <button class="btn small" onclick="addToCart('${p.id}')">Add to Cart</button>
+            <button class="wish small" id="wish-${p.id}" onclick="toggleWishlist('${p.id}', this)">♥</button>
+        </div>
+
+        <div class="stars" id="stars-${p.id}">
+            ${[1,2,3,4,5].map(n => `
+                <span class="star" data-n="${n}" onclick="rate('${p.id}', ${n}, this)">★</span>
+            `).join('')}
+        </div>
       `;
-      catRow.appendChild(card);
+
+      grid.appendChild(card);
     });
 
-    section.appendChild(catRow);
-    productContainer.appendChild(section);
+    sect.appendChild(grid);
+    area.appendChild(sect);
   }
-</script>
+}
 
+
+// ⭐ Subcategory buttons
+document.querySelectorAll(".subcat-btns button").forEach(btn => {
+
+  btn.addEventListener("click", function () {
+
+    console.log("Button clicked:", this.dataset.target);
+
+    // remove highlight
+    document.querySelectorAll(".subcat-btns button")
+      .forEach(b => b.classList.remove("active"));
+
+    this.classList.add("active");
+
+    // set filter
+    const target = this.dataset.target;
+    currentFilter = target;
+
+    renderShop();
+
+    // ⭐ scroll to category section
+    const section = document.getElementById(target);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  });
+});
+
+window.onload = onLoad;
+renderShop();
+
+/* ======= App state per user ======= */
+let users = storageGet('lg_users', {}); // {email: {name,wishlist:[],cart:[],ratings:{},orders:[]}}
+let currentEmail = localStorage.getItem('lg_current') || null;
+/* ======= UI utilities ======= */
+function showToast(msg, ms=1600){
+  const t=document.getElementById('toast'); t.textContent=msg; t.style.display='block';
+  setTimeout(()=>t.style.display='none', ms);
+}
+function formatPrice(n){ return '₹'+n; }
+/* ======= Navigation & init ======= */
+function hideAllSections(){ document.querySelectorAll('.section').forEach(s=>s.style.display='none'); }
+function showSection(id){
+  hideAllSections();
+  const el=document.getElementById(id);
+  if(!el) return;
+  el.style.display='block';
+  if(id==='shop') renderShop();
+  if(id==='cart') renderCart();
+  // scroll to top
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function onLoad(){
+  document.getElementById('btnContinue').addEventListener('click', handleContinue);
+  document.getElementById('inpName').addEventListener('input', validateLoginInputs);
+  document.getElementById('inpEmail').addEventListener('input', validateLoginInputs);
+  updateAuthUI();
+  loadFromStorage();
+renderSubcats();
+  if(currentEmail) showSection('home'); else showSection('login');
+  renderShop(); updateCartCount();
+}
+
+
+/* ======= Auth (login/register) ======= */
+function validateLoginInputs(){
+  const name=document.getElementById('inpName').value.trim();
+  const email=document.getElementById('inpEmail').value.trim();
+  document.getElementById('btnContinue').disabled = !(name && email.includes('@'));
+}
+function handleContinue(){
+  const name=document.getElementById('inpName').value.trim();
+  const email=document.getElementById('inpEmail').value.trim().toLowerCase();
+  if(!name){ document.getElementById('name-err').style.display='block'; return; }
+  if(!email.includes('@')){ document.getElementById('email-err').style.display='block'; return; }
+  document.getElementById('name-err').style.display='none'; document.getElementById('email-err').style.display='none';
+  if(!users[email]) users[email] = { name, wishlist:[], cart:[], ratings:{}, orders:[] };
+  else users[email].name = name;
+  storageSet('lg_users', users);
+  currentEmail = email; localStorage.setItem('lg_current', email);
+  document.getElementById('login-success').style.display='block';
+  setTimeout(()=>document.getElementById('login-success').style.display='none',1400);
+  updateAuthUI();
+  showSection('home');
+  renderShop();
+  applyAllUserState();
+}  
+
+
+
+/* ======= Auth UI update ======= */
+function updateAuthUI(){
+  const welcome = document.getElementById('welcome-text');
+  const welcomeName = document.getElementById('welcome-name');
+  if(currentEmail && users[currentEmail]){
+    document.getElementById('login-link').style.display='none';
+    document.getElementById('logout-link').style.display='inline-block';
+    welcome.style.display = 'inline-block';
+    welcomeName.textContent = users[currentEmail].name || '';
+  } else {
+    document.getElementById('login-link').style.display='inline-block';
+    document.getElementById('logout-link').style.display='none';
+    welcome.style.display = 'none';
+    welcomeName.textContent = '';
+  }
+}
+
+/* ======= Shop rendering ======= */
+/* helper: find product by id */
+function findProductById(id){
+  for(const cat in SAMPLE.categories){
+    const found = SAMPLE.categories[cat].find(p=>p.id===id);
+    if(found) return found;
+  }
+  return null;
+}
+
+/* ======= Cart functions ======= */
+function getUser(){ return currentEmail && users[currentEmail] ? users[currentEmail] : null; }
+function addToCart(prodId){
+  if(!currentEmail) return showToast('Please login first');
+  const user = getUser();
+  const prod = findProductById(prodId);
+  if(!prod) return showToast('Product not found');
+  const exists = user.cart.find(i=>i.id===prodId);
+  if(exists){ exists.qty++; }
+  else user.cart.push({ id: prodId, qty:1, price: prod.price, name: prod.name, img: prod.img });
+  storageSet('lg_users', users);
+  showToast(`${prod.name} added to cart`);
+  updateCartCount();
+}
+function updateCartCount(){
+  const u = getUser();
+  const count = u ? u.cart.reduce((s,i)=>s+i.qty,0) : 0;
+  document.getElementById('cart-count').textContent = count;
+}
+function renderCart(){
+  if(!currentEmail) { showToast('Please login to view cart'); showSection('login'); return; }
+  const user = getUser();
+  const container = document.getElementById('cart-items');
+  container.innerHTML = '';
+  if(!user.cart || user.cart.length===0){
+    container.innerHTML = '<div class="card small-muted">Cart is empty</div>';
+    document.getElementById('continue-btn').style.display='none';
+    document.getElementById('checkout').style.display='none';
+    return;
+  }
+  document.getElementById('continue-btn').style.display='inline-block';
+  user.cart.forEach((it, idx) => {
+    const div = document.createElement('div'); div.className='cart-item';
+    div.innerHTML = `
+      <img src="${it.img}" alt="${it.name}" onerror="this.style.opacity=.6">
+      <div class="meta">
+        <b>${it.name}</b><div class="small-muted">Price: ${formatPrice(it.price)}</div>
+        <div class="qty" style="margin-top:8px">
+          <button class="small" onclick="changeQty(${idx}, -1)">-</button>
+          <div style="min-width:28px;text-align:center">${it.qty}</div>
+          <button class="small" onclick="changeQty(${idx}, 1)">+</button>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <button class="small" onclick="removeFromCart(${idx})">Remove</button>
+        <div class="small-muted" style="text-align:right">${formatPrice(it.price * it.qty)}</div>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+function changeQty(idx, delta){
+  const user = getUser();
+  if(!user) return;
+  user.cart[idx].qty += delta;
+  if(user.cart[idx].qty < 1) user.cart.splice(idx,1);
+  storageSet('lg_users', users);
+  updateCartCount(); renderCart();
+}
+function removeFromCart(idx){
+  const user = getUser(); if(!user) return;
+  user.cart.splice(idx,1); storageSet('lg_users', users); updateCartCount(); renderCart();
+}
+function beginCheckout(){ document.getElementById('checkout').style.display='block'; }
+
+/* ======= Checkout & orders ======= */
+function placeOrder(){
+  const user = getUser(); if(!user) return showToast('Login required');
+  if(!user.cart || user.cart.length===0) return showToast('Cart is empty');
+  const shipName = document.getElementById('shipName').value.trim();
+  const shipPhone = document.getElementById('shipPhone').value.trim();
+  const shipAddress = document.getElementById('shipAddress').value.trim();
+  if(!shipName || !shipPhone || !shipAddress) return showToast('Fill shipping details');
+  const order = {
+    id: 'O' + Date.now(),
+    date: new Date().toLocaleString(),
+    items: user.cart.map(i=>({ ...i })),
+    shipping:{shipName,shipPhone,shipAddress},
+    total: user.cart.reduce((s,i)=>s + i.price*i.qty,0)
+  };
+  user.orders = user.orders || [];
+  user.orders.push(order);
+  user.cart = [];
+  storageSet('lg_users', users);
+  updateCartCount(); renderCart();
+  showConfetti();
+  showToast('Order placed');
+  updateProfileContent();
+}
+
+/* ======= Wishlist & Ratings ======= */
+function toggleWishlist(id, btn){
+  if(!currentEmail) return showToast('Please login first');
+  const user=getUser();
+  user.wishlist = user.wishlist || [];
+  const idx = user.wishlist.indexOf(id);
+  if(idx===-1){ user.wishlist.push(id); btn.classList.add('active'); showToast('Added to wishlist'); }
+  else{ user.wishlist.splice(idx,1); btn.classList.remove('active'); showToast('Removed from wishlist'); }
+  storageSet('lg_users', users); updateProfileContent();
+}
+function applyUserStateToProduct(id){
+  const user = getUser();
+  const wishBtn = document.getElementById('wish-'+id);
+  const starsContainer = document.getElementById('stars-'+id);
+  if(wishBtn){
+    if(user && user.wishlist && user.wishlist.includes(id)) wishBtn.classList.add('active');
+    else wishBtn.classList.remove('active');
+  }
+  // ratings
+  if(starsContainer){
+    const children = Array.from(starsContainer.children);
+    children.forEach(c=>c.classList.remove('active'));
+    if(user && user.ratings && user.ratings[id]){
+      const r = user.ratings[id];
+      for(let i=0;i<r && i<children.length;i++){
+        children[i].classList.add('active');
+      }
+    }
+  }
+}
+function rate(id, value, el){
+  if(!currentEmail) return showToast('Please login first');
+  const user = getUser();
+  user.ratings = user.ratings||{};
+  user.ratings[id] = value;
+  storageSet('lg_users', users);
+  // visually set active
+  const container = document.getElementById('stars-'+id);
+  if(container){
+    Array.from(container.children).forEach(c=>c.classList.remove('active'));
+    for(let i=0;i<value;i++) if(container.children[i]) container.children[i].classList.add('active');
+  }
+  showToast(`Rated ${value}★`);
+  updateProfileContent();
+}
+
+/* ======= Profile sidebar ======= */
+function openSidebar(){
+  if(!currentEmail){ showToast('Please login first'); showSection('login'); return; }
+  document.getElementById('sidebar').style.display='flex';
+  updateProfileContent();
+}
+function closeSidebar(){ document.getElementById('sidebar').style.display='none'; }
+function updateProfileContent(){
+  const container = document.getElementById('profile-content');
+  if(!currentEmail){ container.innerHTML = '<div class="small-muted">Not logged in</div>'; return; }
+  const user = getUser();
+  container.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 320px;gap:12px">
+      <div>
+        <div class="profile-card card">
+          <h4>${user.name}</h4>
+          <div class="small-muted">Email: ${currentEmail}</div>
+          <div style="margin-top:8px;" class="small-muted">Cart items: ${ (user.cart||[]).reduce((s,i)=>s+i.qty,0) }</div>
+          <div class="small-muted">Wishlist: ${(user.wishlist||[]).length}</div>
+          <div class="small-muted">Orders: ${(user.orders||[]).length}</div>
+          <div style="margin-top:10px">
+            <button class="btn small" onclick="openEditProfile()">Edit Profile</button>
+            <button class="small" onclick="logout()">Logout</button>
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <h4>Activity / Orders</h4>
+          <div id="orders-list"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="profile-card card">
+          <h4>Wishlist</h4>
+          <div id="profile-wishlist"></div>
+        </div>
+        <div style="margin-top:12px" class="card">
+          <h4>Help & Policies</h4>
+          <div style="margin-top:8px">
+            <strong>FAQ</strong>
+            <div class="small-muted" style="margin-top:6px">- How to order? Add items and checkout. <br>- Payment: Cash on Delivery (demo).</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  // render orders & wishlist
+  const ordersList = container.querySelector('#orders-list');
+  ordersList.innerHTML = '';
+  (user.orders||[]).slice().reverse().forEach(o=>{
+    const d = document.createElement('div'); d.className='card'; d.style.marginTop='8px';
+    d.innerHTML = `<b>Order ${o.id}</b> <div class="small-muted">${o.date}</div>
+      <div style="margin-top:6px">${o.items.map(it=>`${it.name} x${it.qty}`).join(', ')}</div>
+      <div style="margin-top:6px;font-weight:700">Total: ${formatPrice(o.total)}</div>`;
+    ordersList.appendChild(d);
+  });
+  const profileWishlist = container.querySelector('#profile-wishlist');
+  profileWishlist.innerHTML = '';
+  (user.wishlist||[]).forEach(id=>{
+    const p = findProductById(id) || {name:id, img:''};
+    const e = document.createElement('div'); e.style.display='flex'; e.style.alignItems='center'; e.style.gap='8px'; e.style.marginTop='8px';
+    e.innerHTML = `<img src="${p.img}" style="width:56px;height:44px;object-fit:cover;border-radius:6px" onerror="this.style.opacity=.6">
+      <div style="flex:1"><b>${p.name}</b><div class="small-muted">${formatPrice(p.price||0)}</div></div>
+      <button class="small" onclick="addWishlistToCart('${id}')">Add to cart</button>`;
+    profileWishlist.appendChild(e);
+  });
+}
+function addWishlistToCart(id){
+  const prod = findProductById(id);
+  if(!prod) return;
+  addToCart(id);
+  openSidebar();
+}
+
+/* edit profile inline */
+function openEditProfile(){
+  const container = document.getElementById('profile-content');
+  const user = getUser();
+  container.innerHTML = `
+    <div class="card">
+      <h3>Edit Profile</h3>
+      <div class="form-row">
+        <input id="editName" type="text" value="${user.name}" />
+        <input id="editEmail" type="email" value="${currentEmail}" />
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button class="btn" onclick="saveProfile()">Save</button>
+          <button class="small" onclick="updateProfileContent()">Cancel</button>
+        </div>
+        <div class="small-muted" style="margin-top:8px">Note: changing email will move account data to new email.</div>
+      </div>
+    </div>
+  `;
+}
+function saveProfile(){
+  const name = document.getElementById('editName').value.trim();
+  const email = document.getElementById('editEmail').value.trim().toLowerCase();
+  if(!name || !email.includes('@')) return showToast('Enter valid name and email');
+  if(email !== currentEmail){
+    if(users[email]) return showToast('Email already exists');
+    users[email] = users[currentEmail];
+    delete users[currentEmail];
+    currentEmail = email;
+    localStorage.setItem('lg_current', email);
+  }
+  users[currentEmail].name = name;
+  storageSet('lg_users', users);
+  updateAuthUI();
+  updateProfileContent();
+  showToast('Profile updated');
+}
+
+/* ======= Confetti animation ======= */
+let confettiAnim = null;
+function showConfetti(){
+  const overlay=document.getElementById('confetti-overlay'); overlay.style.display='flex';
+  const canvas=document.getElementById('confetti-canvas'); canvas.width=window.innerWidth; canvas.height=window.innerHeight;
+  const ctx = canvas.getContext('2d');
+  const pieces = [];
+  for(let i=0;i<200;i++){
+    pieces.push({
+      x: Math.random()*canvas.width,
+      y: Math.random()*canvas.height - canvas.height,
+      r: Math.random()*6 + 4,
+      dx: (Math.random()-0.5)*4,
+      dy: Math.random()*3 + 2,
+      c: `hsl(${Math.random()*360},80%,60%)`,
+      rot: Math.random()*360
+    });
+  }
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    pieces.forEach(p=>{
+      ctx.save();
+      ctx.fillStyle = p.c;
+      ctx.translate(p.x,p.y);
+      ctx.rotate(p.rot * Math.PI/180);
+      ctx.fillRect(-p.r/2,-p.r/2,p.r*1.5,p.r*0.6);
+      ctx.restore();
+      p.x += p.dx; p.y += p.dy; p.rot += 2;
+      if(p.y > canvas.height + 20){ p.y = -20; p.x = Math.random()*canvas.width; }
+    });
+    confettiAnim = requestAnimationFrame(draw);
+  }
+  draw();
+}
+function closeConfetti(){
+  document.getElementById('confetti-overlay').style.display='none';
+  if(confettiAnim) cancelAnimationFrame(confettiAnim);
+}
+
+/* ======= Logout ======= */
+function logout(){
+  localStorage.removeItem('lg_current');
+  currentEmail = null;
+  updateAuthUI();
+  showSection('login');
+  showToast('Logged out');
+}
+
+/* ======= Helpers & syncing ======= */
+function loadFromStorage(){
+  const s = storageGet('lg_users', {});
+  if(s) users = s;
+  const cur = localStorage.getItem('lg_current'); if(cur) currentEmail = cur;
+  updateAuthUI();
+}
+window.addEventListener('beforeunload', ()=>{ storageSet('lg_users', users); });
+
+/* Apply user state on rendering shop */
+function applyAllUserState(){
+  if(!currentEmail) return;
+  for(const cat in SAMPLE.categories){
+    SAMPLE.categories[cat].forEach(p => { if(p.id) applyUserStateToProduct(p.id); });
+  }
+}
+
+/* convenience: when opening shop render, then apply state */
+(function patchRenderShopApply(){
+  const old = renderShop;
+  renderShop = function(){ old(); applyAllUserState(); };
+})();
+
+/* utility to updateCartCount periodically (helps when other tabs change storage) */
+setInterval(()=>{ loadFromStorage(); updateCartCount(); }, 3000);
+
+/* Make sure welcome text updates when DOM ready */
+document.addEventListener('DOMContentLoaded', ()=>{
+  if(currentEmail && users[currentEmail]) {
+    document.getElementById('welcome-text').style.display='inline-block';
+    document.getElementById('welcome-name').textContent = users[currentEmail].name;
+  }
+});
+function showSection(id) {
+    document.querySelectorAll("section").forEach(sec => {
+        sec.style.display = "none";
+    });
+    document.getElementById(id).style.display = "block";
+}
+
+function openSidebar() {
+    document.getElementById("sidebar").style.left = "0";
+}
+
+function closeSidebar() {
+    document.getElementById("sidebar").style.left = "-260px";
+}
+
+
+
+</script>
 </body>
 </html>
