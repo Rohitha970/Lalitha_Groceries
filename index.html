@@ -207,6 +207,49 @@ footer{padding:12px 16px;text-align:center;background:#111;color:#fff;margin-top
     grid-template-columns: repeat(1, 1fr);
   }
 }
+  .home-hero-grid {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 20px;
+}
+
+#home-img {
+  width: 380px;
+  max-width: 100%;
+  border-radius: 12px;
+}
+
+.home-text {
+  max-width: 480px;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 15px 0;
+}
+
+.quick-tips ul {
+  margin-top: 8px;
+  padding-left: 18px;
+  color: #666;
+}
+
+/* MOBILE FIX */
+@media (max-width: 768px) {
+  .home-hero-grid {
+    text-align: center;
+  }
+  .hero-buttons {
+    justify-content: center;
+  }
+}
+
+
 
 </style>
 </head>
@@ -237,17 +280,25 @@ footer{padding:12px 16px;text-align:center;background:#111;color:#fff;margin-top
 <div class="container">
   <!-- HOME -->
   <section id="home" class="section">
-    <div class="home-grid">
-      <div class="home-hero card">
+  <div class="home-hero-grid card">
+
+    <!-- LEFT IMAGE -->
+    <img id="home-img" src="home-banner.png" alt="Home banner">
+
+    <!-- RIGHT TEXT -->
+    <div class="home-text">
+      <h2>Fresh groceries, delivered fast</h2>
+      <p class="lead">
+        Handpicked fruits, vegetables, dairy and pantry essentials
+        from trusted local farmers. Fast delivery with friendly service.
+      </p>
+
+      <!-- BUTTONS -->
+      <div class="hero-buttons">
+  
+
+  
         
-<img id="home-img" src="home-banner.png" alt="Home banner" width="600" height="300">
-
-
-      </div>
-      <div class="home-cta card">
-        <h2>Fresh groceries, delivered fast</h2>
-        <p class="lead">Handpicked fruits, vegetables, dairy and pantry essentials from trusted local farmers. Fast delivery with friendly service.</p>
-        <div style="margin-top:12px">
           <div style="display:flex;gap:10px;flex-wrap:wrap">
             <button class="btn" onclick="showSection('shop'); scrollToSection('shop')">Shop Now</button>
             <button class="btn" onclick="showSection('about');scrollToSection('about')">Read More</button>
@@ -1145,4 +1196,5 @@ document.addEventListener('DOMContentLoaded', ()=>{
 </script>
 </body>
 </html>
+
 
