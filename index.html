@@ -281,6 +281,17 @@ footer{padding:12px 16px;text-align:center;background:#111;color:#fff;margin-top
     justify-content: center;
   }
 }
+  /* Force HOME image on top & text below on all devices */
+.home-hero-grid {
+  display: block !important;
+  text-align: center;
+}
+
+.home-hero-grid img {
+  display: block;
+  margin: 0 auto 20px auto;
+}
+
 
 
 
@@ -313,42 +324,45 @@ footer{padding:12px 16px;text-align:center;background:#111;color:#fff;margin-top
 <div class="container">
   <!-- HOME -->
   <section id="home" class="section">
-  <div class="home-hero-grid card">
+  <div class="card" style="text-align:center; padding:20px">
 
-    <!-- LEFT IMAGE -->
-    <img id="home-img" src="home-banner.png" alt="Home banner">
+    <!-- IMAGE ON TOP ALWAYS -->
+    <img id="home-img" 
+         src="home-banner.png" 
+         alt="Home banner"
+         style="width:100%; max-width:380px; border-radius:12px; margin-bottom:20px">
 
-    <!-- RIGHT TEXT -->
-    <div class="home-text">
+    <!-- TEXT BELOW -->
+    <div class="home-text" style="max-width:600px; margin:0 auto;">
       <h2>Fresh groceries, delivered fast</h2>
+
       <p class="lead">
         Handpicked fruits, vegetables, dairy and pantry essentials
         from trusted local farmers. Fast delivery with friendly service.
       </p>
 
       <!-- BUTTONS -->
-      <div class="hero-buttons">
-  
+      <div class="hero-buttons" style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin:18px 0;">
+        <button class="btn" onclick="showSection('shop'); scrollToSection('shop')">Shop Now</button>
+        <button class="btn" onclick="showSection('about');scrollToSection('about')">Read More</button>
+        <button class="small" onclick="openSidebar()">Open Profile</button>
+      </div>
 
-  
-        
-          <div style="display:flex;gap:10px;flex-wrap:wrap">
-            <button class="btn" onclick="showSection('shop'); scrollToSection('shop')">Shop Now</button>
-            <button class="btn" onclick="showSection('about');scrollToSection('about')">Read More</button>
-            <button class="small" onclick="openSidebar()">Open Profile</button>
-          </div>
-        </div>
-        <div style="margin-top:18px;color:#666">
-          <strong>Quick tips:</strong>
-          <ul style="margin-top:8px">
-            <li>Use the Shop tab to browse categories</li>
-            <li>Add items to wishlist for later</li>
-            <li>Checkout with cash on delivery (demo)</li>
-          </ul>
-        </div>
+      <!-- QUICK TIPS -->
+      <div style="margin-top:18px;color:#666;text-align:left; max-width:500px; margin:20px auto 0 auto;">
+        <strong>Quick tips:</strong>
+        <ul style="margin-top:8px">
+          <li>Use the Shop tab to browse categories</li>
+          <li>Add items to wishlist for later</li>
+          <li>Checkout with cash on delivery (demo)</li>
+        </ul>
       </div>
     </div>
-  </section>
+
+  </div>
+</section>
+
+  
   <section id="home2" class="section">
     <h2>Welcome!</h2>
     <p class="lead">Your one-stop shop for fresh fruits, vegetables, dairy, bakery, beverages and pantry items.</p>
@@ -1229,6 +1243,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 </script>
 </body>
 </html>
+
 
 
 
