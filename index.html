@@ -306,11 +306,49 @@ footer{padding:12px 16px;text-align:center;background:#111;color:#fff;margin-top
   line-height: 1.5;
 }
 
+/* 🔥 Intro Animation */
+#intro-screen {
+  position: fixed;
+  inset: 0;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+  animation: fadeOut 2.5s ease forwards;
+}
+
+.intro-text {
+  font-size: 38px;
+  font-weight: 800;
+  color:#ff0088 ;
+  opacity: 0;
+  animation: popIn 1.8s ease forwards;
+}
+
+/* Text pop animation */
+@keyframes popIn {
+  0% { transform: scale(0.6); opacity: 0; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Screen fade out */
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  75% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
 
 
 </style>
 </head>
 <body>
+  <!-- 🌟 Intro Animation Screen -->
+<div id="intro-screen">
+  <h1 class="intro-text">Lalitha Groceries</h1>
+</div>
+
 
 <header>
   <div style="display:flex;align-items:center;gap:12px;">
@@ -1260,8 +1298,17 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 
 </script>
+  <script>
+  window.onload = function() {
+    setTimeout(() => {
+      document.getElementById("intro-screen").style.display = "none";
+    }, 2600);
+  };
+</script>
+
 </body>
 </html>
+
 
 
 
