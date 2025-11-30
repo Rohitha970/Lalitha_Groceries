@@ -993,6 +993,22 @@ function renderCart(){
     document.getElementById('continue-btn').style.display='none';
     document.getElementById('checkout').style.display='none';
     return;
+    // === Show total amount at bottom of cart ===
+const user = getUser();
+if(user && user.cart.length > 0){
+  const total = user.cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const totalBox = document.createElement('div');
+  totalBox.style.marginTop = "15px";
+  totalBox.style.padding = "12px";
+  totalBox.style.background = "#ffe6f2";
+  totalBox.style.borderRadius = "8px";
+  totalBox.style.fontSize = "18px";
+  totalBox.style.fontWeight = "bold";
+  totalBox.style.color = "#e60073";
+  totalBox.innerText = `Total Amount: ₹${total}`;
+  document.getElementById('cart-items').appendChild(totalBox);
+}
+
   }
   document.getElementById('continue-btn').style.display='inline-block';
   user.cart.forEach((it, idx) => {
@@ -1308,6 +1324,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 </body>
 </html>
+
 
 
 
